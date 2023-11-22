@@ -1,7 +1,17 @@
-[gd_scene load_steps=5 format=3 uid="uid://bg0ydty273sxa"]
+[gd_scene load_steps=15 format=3 uid="uid://bg0ydty273sxa"]
 
-[ext_resource type="Texture2D" uid="uid://cs8elhul5agqr" path="res://images/dog_2.png" id="1_uyw3o"]
 [ext_resource type="Script" path="res://scripts/Ball.cs" id="1_wrnlh"]
+[ext_resource type="Texture2D" uid="uid://bfnvb3u3pjegn" path="res://images/fruit1.png" id="3_l2s12"]
+[ext_resource type="Texture2D" uid="uid://cm3i1cbwdniq4" path="res://images/fruit2.png" id="4_vnpty"]
+[ext_resource type="Texture2D" uid="uid://cu5we4w42h0w6" path="res://images/fruit3.png" id="5_b8rnf"]
+[ext_resource type="Texture2D" uid="uid://co84od1hi38h1" path="res://images/fruit4.png" id="6_jxgm8"]
+[ext_resource type="Texture2D" uid="uid://c2hc1sod4wy0a" path="res://images/fruit5.png" id="7_lttve"]
+[ext_resource type="Texture2D" uid="uid://bx2m4gx4m76dr" path="res://images/fruit6.png" id="8_s6jtc"]
+[ext_resource type="Texture2D" uid="uid://q62uhcliw4u7" path="res://images/fruit7.png" id="9_wsqc1"]
+[ext_resource type="Texture2D" uid="uid://b80ttfhioloqw" path="res://images/fruit8.png" id="10_0m1wf"]
+[ext_resource type="Texture2D" uid="uid://drc75m7mv4hwh" path="res://images/fruit9.png" id="11_eyxx2"]
+[ext_resource type="Texture2D" uid="uid://tycdg21y4q7b" path="res://images/fruit10.png" id="12_7igmj"]
+[ext_resource type="Texture2D" uid="uid://dgscte3yt0d53" path="res://images/fruit11.png" id="13_aj52m"]
 
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_flbvr"]
 
@@ -17,6 +27,67 @@ script = ExtResource("1_wrnlh")
 scale = Vector2(10, 10)
 shape = SubResource("CircleShape2D_fsdc3")
 
-[node name="SpriteDog1" type="Sprite2D" parent="CollisionShapeDog1"]
-scale = Vector2(0.0293411, 0.0293411)
-texture = ExtResource("1_uyw3o")
+[node name="Fruit1" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0, -3)
+scale = Vector2(0.0907658, 0.0907658)
+texture = ExtResource("3_l2s12")
+
+[node name="Fruit2" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+scale = Vector2(0.0776731, 0.0776731)
+texture = ExtResource("4_vnpty")
+
+[node name="Fruit3" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0.2, -0.7)
+scale = Vector2(0.0796004, 0.0796004)
+texture = ExtResource("5_b8rnf")
+
+[node name="Fruit4" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0, -0.8)
+scale = Vector2(0.0808233, 0.0808233)
+texture = ExtResource("6_jxgm8")
+
+[node name="Fruit5" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0.0249997, -0.842187)
+scale = Vector2(0.0748162, 0.0748162)
+texture = ExtResource("7_lttve")
+
+[node name="Fruit6" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0.0562489, -0.437975)
+scale = Vector2(0.0729671, 0.0729671)
+texture = ExtResource("8_s6jtc")
+
+[node name="Fruit7" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0.0500008, -0.436412)
+scale = Vector2(0.0728261, 0.0728261)
+texture = ExtResource("9_wsqc1")
+
+[node name="Fruit8" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(0.113194, 0.00758564)
+scale = Vector2(0.0707807, 0.0707806)
+texture = ExtResource("10_0m1wf")
+
+[node name="Fruit9" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(-0.125, -1.66097)
+scale = Vector2(0.0823171, 0.0823171)
+texture = ExtResource("11_eyxx2")
+
+[node name="Fruit10" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(-0.0374985, -0.318417)
+scale = Vector2(0.0733871, 0.0733871)
+texture = ExtResource("12_7igmj")
+
+[node name="Fruit11" type="Sprite2D" parent="CollisionShapeDog1"]
+visible = false
+position = Vector2(-0.156102, 0.041352)
+scale = Vector2(0.0705062, 0.0705062)
+texture = ExtResource("13_aj52m")

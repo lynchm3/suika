@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using static System.Net.Mime.MediaTypeNames;
+
 public partial class main : Node2D
 {
 
@@ -10,7 +12,7 @@ public partial class main : Node2D
     Sprite2D Sprite2DPreview = null;
     Sprite2D Sprite2DLine = null;
     public static RandomNumberGenerator RNG = new RandomNumberGenerator();
-    Dog CurrentType = null;
+    static Dog CurrentType = null;
     public static Node2D thisObject = null;
     public static Node newBall;
 
@@ -21,6 +23,9 @@ public partial class main : Node2D
     static Sprite2D Sprite2DGameOver;
     static Sprite2D Sprite2DRestart;
     static bool GameOverFlag = false;
+    public static float dropPosition = 0;
+    public static int score = 0;
+    public static Sprite2D TEST;
 
     //redeem 50 points to drop fruit
     //Redeem 500 points unstick/rotate/bump/tilt
@@ -63,7 +68,10 @@ public partial class main : Node2D
 
     public override void _Ready()
     {
+        SocketAsync();
+
         thisObject = this;
+        TEST = (Sprite2D)GetNode(new NodePath("TEST"));
         RigidBodyPreview = (RigidBody2D)GetNode(new NodePath("Preview"));
         Sprite2DLine = (Sprite2D)GetNode(new NodePath("SpriteLine"));
         RigidBodyPreview.SetMeta("preview", true);
@@ -85,12 +93,16 @@ public partial class main : Node2D
 
         Sprite2DGameOver = (Sprite2D)GetNode(new NodePath("Sprite2DGameOver"));
         Sprite2DRestart = (Sprite2D)GetNode(new NodePath("Sprite2DRestart"));
-        
+
+    }
+
+    public async void SocketAsync()
+    {
+        await WebSocketController.Setup("lynchmakesgames"/*auth.broadcaster*/);
     }
 
     public override void _Process(double delta)
     {
-
         if (GameOverFlag == true)
         {
             PhysicsServer2D.SetActive(false);
@@ -99,16 +111,42 @@ public partial class main : Node2D
             return;
         }
 
-        Vector2 MousePosition = GetViewport().GetMousePosition();
-        RigidBodyPreview.Position = new Vector2(MousePosition.X, DROP_HEIGHT);
+        if (dropPosition != 0)
+        {
+            float circleRadius = 10f;
+            float wallRadius = 10f;
 
-        if (RigidBodyPreview.Position.X < CollisionShapeLeft.Position.X)
-        {
-            RigidBodyPreview.Position = new Vector2(CollisionShapeLeft.Position.X, RigidBodyPreview.Position.Y);
-        } else if (RigidBodyPreview.Position.X > CollisionShapeRight.Position.X)
-        {
-            RigidBodyPreview.Position = new Vector2(CollisionShapeRight.Position.X, RigidBodyPreview.Position.Y);
+            float minimum = CollisionShapeLeft.Position.X + CurrentType.Scale * circleRadius + wallRadius;
+            float maximum = CollisionShapeRight.Position.X - CurrentType.Scale * circleRadius - wallRadius;
+
+            TEST.Position = new Vector2(minimum + (maximum - minimum)/2, TEST.Position.Y);
+            TEST.Scale = new Vector2(maximum-minimum, TEST.Scale.Y);
+
+            GD.Print("minimum = " + minimum);
+            GD.Print("maximum = " + maximum);
+
+            float dropX = ((maximum - minimum) / 100f) * dropPosition + minimum;
+
+            GD.Print("dropping at = " + dropX);
+            GD.Print("RigidBodyPreview.Position.Y = " + RigidBodyPreview.Position.Y);
+
+            dropPosition = 0;
+
+            drop(new Vector2(dropX, DROP_HEIGHT));
         }
+
+        Vector2 MousePosition = GetViewport().GetMousePosition();
+        //RigidBodyPreview.Position = new Vector2(MousePosition.X, DROP_HEIGHT);
+        //if (RigidBodyPreview.Position.X < CollisionShapeLeft.Position.X)
+        //{
+        //    RigidBodyPreview.Position = new Vector2(CollisionShapeLeft.Position.X, RigidBodyPreview.Position.Y);
+        //}
+        //else if (RigidBodyPreview.Position.X > CollisionShapeRight.Position.X)
+        //{
+        //    RigidBodyPreview.Position = new Vector2(CollisionShapeRight.Position.X, RigidBodyPreview.Position.Y);
+        //}
+
+        RigidBodyPreview.Position = new Vector2(200, DROP_HEIGHT+50);
 
         Sprite2DLine.Position = new Vector2(RigidBodyPreview.Position.X, Sprite2DLine.Position.Y);
 
@@ -129,6 +167,8 @@ public partial class main : Node2D
             //mouseDown = true;
             if(GameOverFlag)
             {
+
+                score = 0;
                 GD.Print("mouse click gameover");
                 //if (Sprite2DRestart.GetRect().HasPoint(ToLocal(eventMouseButton.Position)))
                 //{
@@ -154,10 +194,14 @@ public partial class main : Node2D
                 
             } else if (eventMouseButton.ButtonIndex == MouseButton.Left && eventMouseButton.Pressed)
             {
-                CreateDog(RigidBodyPreview.Position, CurrentType.Type);
-                setNextSize();
+                //drop(RigidBodyPreview.Position);
             }
         }
+    }
+    public void drop(Vector2 position)
+    {
+        CreateDog(position, CurrentType.Type);
+        setNextSize();
     }
 
     public void setNextSize()
@@ -166,12 +210,22 @@ public partial class main : Node2D
 
         CurrentType = Dog.Dogs[random];
 
-        Sprite2DPreview.Modulate = CurrentType.Color;
+
+        foreach (Node child in CollisionShapePreview.GetChildren())
+        {
+            ((Sprite2D)child).Visible = false;
+        }        
+
+        ((Sprite2D)CollisionShapePreview.GetChildren()[random]).Visible = true;
+
         CollisionShapePreview.Scale = new Vector2(CurrentType.Scale, CurrentType.Scale);
     }
 
     public static void CreateDog(Vector2 Position, int Type)
     {
+
+        GD.Print("CreateDog: " + Position + ", " + Type);
+
         if (Type >= Dog.Dogs.Length)
         {
             Type = 0;
@@ -179,12 +233,19 @@ public partial class main : Node2D
 
         Dog TypeToUse = Dog.Dogs[Type];
         RigidBody2D RigidBodyDog = (RigidBody2D)ResourceLoader.Load<PackedScene>("res://dog1.tscn").Instantiate();
+        RigidBodyDog.Mass = TypeToUse.Scale;
+        //RigidBodyDog.GravityScale = 0;
+        //RigidBodyDog.LinearVelocity = new Vector2(0, 100);
+        //RigidBodyDog.Mass = 0;
+
         CollisionShape2D CollisionShapeDog = (CollisionShape2D)RigidBodyDog.FindChild("CollisionShapeDog1");
         Sprite2D Sprite2DDog = (Sprite2D)RigidBodyDog.FindChild("SpriteDog1");
         CollisionShapeDog.Scale = new Vector2(TypeToUse.Scale, TypeToUse.Scale);
         RigidBodyDog.Position = Position;
-        Sprite2DDog.Modulate = TypeToUse.Color;
         RigidBodyDog.SetMeta("type", TypeToUse.Type);
+
+        ((Sprite2D)CollisionShapeDog.GetChildren()[Type]).Visible = true;
+        //CollisionShapePreview.Scale = new Vector2(CurrentType.Scale, CurrentType.Scale);
 
         //CollisionShapeDog.SetPhysicsProcess(false);
         //RigidBodyDog.SetPhysicsProcess(false);

@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://dpo2q410nt4j6"]
+[gd_scene load_steps=10 format=3 uid="uid://dpo2q410nt4j6"]
 
 [ext_resource type="Script" path="res://scripts/main.cs" id="1_jyiwx"]
-[ext_resource type="Texture2D" uid="uid://cf3rdv5uukfch" path="res://images/kennel.png" id="2_mfbho"]
 [ext_resource type="Texture2D" uid="uid://d1v640ky3gghv" path="res://images/whitepixel.png" id="3_fxnt8"]
 [ext_resource type="PackedScene" uid="uid://bg0ydty273sxa" path="res://dog1.tscn" id="3_jgmj2"]
 [ext_resource type="Texture2D" uid="uid://cwuv0kippubfj" path="res://images/Suika_Game_Gameplay.png" id="4_p0gju"]
@@ -18,20 +17,10 @@ size = Vector2(2261, 697)
 [node name="Canvas" type="Node2D"]
 script = ExtResource("1_jyiwx")
 
-[node name="background" type="Sprite2D" parent="."]
-position = Vector2(957.758, 539.209)
-rotation = -3.14159
-scale = Vector2(-1925.47, -1084.24)
-texture = ExtResource("3_fxnt8")
-
-[node name="Kennel" type="Sprite2D" parent="."]
-position = Vector2(950, 115)
-scale = Vector2(0.451306, 0.770784)
-texture = ExtResource("2_mfbho")
-
-[node name="mask" type="Sprite2D" parent="."]
-position = Vector2(1042, -326)
-scale = Vector2(3406.02, 1080)
+[node name="bg" type="Sprite2D" parent="."]
+position = Vector2(326.045, 100)
+rotation = 3.14159
+scale = Vector2(470.22, -200.292)
 texture = ExtResource("3_fxnt8")
 
 [node name="Container" type="StaticBody2D" parent="."]
@@ -41,11 +30,21 @@ position = Vector2(985, 1070)
 shape = SubResource("RectangleShape2D_2dn4q")
 debug_color = Color(0.94902, 0, 0.580392, 0.419608)
 
+[node name="Sprite2D" type="Sprite2D" parent="Container/CollisionShapeBottom"]
+position = Vector2(-9.00005, 1.99999)
+scale = Vector2(906, 22)
+texture = ExtResource("3_fxnt8")
+
 [node name="CollisionShapeRight" type="CollisionShape2D" parent="Container"]
 position = Vector2(1311, 661)
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_2dn4q")
 debug_color = Color(0.94902, 0, 0.580392, 0.419608)
+
+[node name="Sprite2D" type="Sprite2D" parent="Container/CollisionShapeRight"]
+position = Vector2(-9.00005, 1.99999)
+scale = Vector2(906, 22)
+texture = ExtResource("3_fxnt8")
 
 [node name="CollisionShapeLeft" type="CollisionShape2D" parent="Container"]
 position = Vector2(606, 661)
@@ -53,7 +52,13 @@ rotation = -1.5708
 shape = SubResource("RectangleShape2D_2dn4q")
 debug_color = Color(0.94902, 0, 0.580392, 0.419608)
 
+[node name="Sprite2D" type="Sprite2D" parent="Container/CollisionShapeLeft"]
+position = Vector2(-9.00005, 1.99999)
+scale = Vector2(906, 22)
+texture = ExtResource("3_fxnt8")
+
 [node name="SpriteLine" type="Sprite2D" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0.313726)
 position = Vector2(869, 610)
 rotation = 3.14159
@@ -61,7 +66,7 @@ scale = Vector2(3.74188, -814.29)
 texture = ExtResource("3_fxnt8")
 
 [node name="Preview" parent="." instance=ExtResource("3_jgmj2")]
-position = Vector2(870, 100)
+position = Vector2(200, 100)
 collision_layer = 0
 collision_mask = 0
 
@@ -98,3 +103,36 @@ visible = false
 z_index = 1
 position = Vector2(954, 836)
 texture = ExtResource("8_3etcq")
+
+[node name="1to100" type="RichTextLabel" parent="."]
+offset_left = 335.0
+offset_top = 1.0
+offset_right = 555.0
+offset_bottom = 160.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 36
+text = "ENTER 1-100
+IN CHAT TO
+DROP"
+
+[node name="Score" type="RichTextLabel" parent="."]
+offset_left = 1379.0
+offset_top = 16.0
+offset_right = 1599.0
+offset_bottom = 175.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 36
+
+[node name="Next" type="RichTextLabel" parent="."]
+offset_left = 153.0
+offset_top = -4.0
+offset_right = 373.0
+offset_bottom = 155.0
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/normal_font_size = 36
+text = "NEXT"
+
+[node name="TEST" type="Sprite2D" parent="."]
+position = Vector2(638, 74)
+scale = Vector2(20, 20)
+texture = ExtResource("3_fxnt8")
