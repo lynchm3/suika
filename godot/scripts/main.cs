@@ -26,6 +26,8 @@ public partial class main : Node2D
     public static float dropPosition = 0;
     public static int score = 0;
     public static Sprite2D TEST;
+    public static RichTextLabel RichTextLabelScore;
+    
 
     //redeem 50 points to drop fruit
     //Redeem 500 points unstick/rotate/bump/tilt
@@ -93,6 +95,8 @@ public partial class main : Node2D
 
         Sprite2DGameOver = (Sprite2D)GetNode(new NodePath("Sprite2DGameOver"));
         Sprite2DRestart = (Sprite2D)GetNode(new NodePath("Sprite2DRestart"));
+
+        RichTextLabelScore = (RichTextLabel)GetNode(new NodePath("RichTextLabelScore"));
 
     }
 
@@ -169,6 +173,8 @@ public partial class main : Node2D
             {
 
                 score = 0;
+                RichTextLabelScore.Text = "" + score;
+
                 GD.Print("mouse click gameover");
                 //if (Sprite2DRestart.GetRect().HasPoint(ToLocal(eventMouseButton.Position)))
                 //{
@@ -253,6 +259,13 @@ public partial class main : Node2D
         newBall = RigidBodyDog;
 
     }
+
+    public static void Score(int type)
+    {
+        score += (type+1) * 2;
+        RichTextLabelScore.Text = "Score: " + score;
+    }
+
     public static void GameOver()
     {
         GameOverFlag = true;

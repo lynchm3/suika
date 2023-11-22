@@ -24,6 +24,7 @@ public partial class Ball : RigidBody2D
 
                 if (otherType == thisType)
                 {
+                    main.Score(thisType);
                     main.CreateDog(CalculateMidpoint(otherBody.Position, this.Position), thisType+1);
                     otherBody.Free();
                     this.QueueFree();
