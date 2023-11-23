@@ -24,6 +24,7 @@ scale = Vector2(470.22, -200.292)
 texture = ExtResource("3_fxnt8")
 
 [node name="Container" type="StaticBody2D" parent="."]
+z_index = 1
 
 [node name="CollisionShapeBottom" type="CollisionShape2D" parent="Container"]
 position = Vector2(985, 1070)
